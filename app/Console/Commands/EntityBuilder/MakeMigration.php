@@ -158,7 +158,14 @@ class MakeMigration extends Command
             $string .= ')';
 
 
-            if(isset($field['sqlProperties']['nullable'])) {
+            $required = false;
+            foreach($field['validations'] as $validation) {
+                if($validation['name']==='required') {
+                    $required = true;
+                }
+            }
+
+            if(!$required) {
                 $string .= '->nullable()';
             }
 

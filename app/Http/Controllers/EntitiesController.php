@@ -72,7 +72,7 @@ class EntitiesController extends Controller
         }
 
 
-        $entities = Entity::with('fields', 'fields.inputType', 'fields.fieldType', 'fields.sqlProperties', 'fields.sqlProperties.sqlType', 'fields.sqlProperties.relatedEntity', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->get();
+        $entities = Entity::with('fields', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->get();
         return ApiResponseController::response('Entity created successfully', 200, $entities);
     }
 
@@ -139,7 +139,6 @@ class EntitiesController extends Controller
 
 
         $this->createOrUpdateOptions($createdField, $field);
-        $this->createOrUpdateSqlProperties($createdField, $field);
         $this->syncValidations($createdField, $field);
 
         return $fieldData['built_edition'];
@@ -161,18 +160,6 @@ class EntitiesController extends Controller
         }
     }
 
-    private function createOrUpdateSqlProperties($createdField, $field)
-    {
-        $createdField->sqlProperties()->updateOrCreate(
-            ['field_id' => $createdField->id],
-            [
-                'sql_property_type_id' => $field['sqlProperties']['sql_property_type_id'],
-                'length' => $field['sqlProperties']['length'],
-                'nullable' => $field['sqlProperties']['nullable'],
-                'field_id' => $createdField->id
-            ]
-        );
-    }
 
 
     private function createOrUpdateRelationships($entityData, $data)
@@ -197,25 +184,34 @@ class EntitiesController extends Controller
     }
 
     private function syncValidations($fieldDB, $data){
-        $fieldDB->validations()->sync($data['validations']);
+        // remove field_id from $data
+        $newData= [];
+        foreach($data['validations'] as $validation){
+            $newData[] = [
+                'validation_id' => $validation['validation_id'],
+                'value' => $validation['value']
+            ];
+        }
+
+        $fieldDB->validations()->sync($newData);
     }
 
     private function updateRelatedEntityId($entityData, $data)
     {
-        foreach ($entityData['fields'] as $field) {
-            if ($field['sqlProperties']['related_entity_id']) {
-                $relatedEntitySqlId = Entity::where('code', $field['sqlProperties']['related_entity_id'])->where('app_id', $data['app_id'])->first()->id;
-                $entityDB = Entity::where('code', $entityData['code'])->where('app_id', $data['app_id'])->first();
-                $field = Field::where('code', $field['code'])->where('entity_id', $entityDB->id)->first();
+        // foreach ($entityData['fields'] as $field) {
+        //     if ($field['sqlProperties']['related_entity_id']) {
+        //         $relatedEntitySqlId = Entity::where('code', $field['sqlProperties']['related_entity_id'])->where('app_id', $data['app_id'])->first()->id;
+        //         $entityDB = Entity::where('code', $entityData['code'])->where('app_id', $data['app_id'])->first();
+        //         $field = Field::where('code', $field['code'])->where('entity_id', $entityDB->id)->first();
 
-                $field->sqlProperties()->updateOrCreate(
-                    ['field_id' => $field->id],
-                    [
-                        'related_entity_id' => $relatedEntitySqlId
-                    ]
-                );
-            }
-        }
+        //         $field->sqlProperties()->updateOrCreate(
+        //             ['field_id' => $field->id],
+        //             [
+        //                 'related_entity_id' => $relatedEntitySqlId
+        //             ]
+        //         );
+        //     }
+        // }
     }
 
     private function buildEntities($entities, $data)
@@ -231,7 +227,7 @@ class EntitiesController extends Controller
     private function buildEntity($entity, $data)
     {
         $entityBD = Entity::where('code', $entity['code'])->where('app_id', $data['app_id'])
-            ->with('fields', 'fields.inputType', 'fields.fieldType', 'fields.sqlProperties', 'fields.sqlProperties.sqlType', 'fields.sqlProperties.relatedEntity', 'fields.options', 'relationships', 'relationships.entity', 'relationships.relationshipType')->first();
+            ->with('fields', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->first();
 
         $app = App::find($data['app_id']);
 
@@ -272,7 +268,7 @@ class EntitiesController extends Controller
      */
     public function show($id)
     {
-        $entities = Entity::with('fields', 'fields.inputType', 'fields.fieldType', 'fields.sqlProperties', 'fields.sqlProperties.sqlType', 'fields.sqlProperties.relatedEntity', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->where('app_id', $id)->get();
+        $entities = Entity::with('fields', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->where('app_id', $id)->get();
 
         return ApiResponseController::response('Entities retrieved successfully', 200, $entities);
     }
@@ -286,7 +282,7 @@ class EntitiesController extends Controller
      */
     public function getEntity($id)
     {
-        $entities = Entity::with('fields', 'fields.inputType', 'fields.fieldType', 'fields.sqlProperties', 'fields.sqlProperties.sqlType', 'fields.sqlProperties.relatedEntity', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->where('id', $id)->first();
+        $entities = Entity::with('fields', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->where('id', $id)->first();
 
         return ApiResponseController::response('Entities retrieved successfully', 200, $entities);
     }
@@ -334,20 +330,14 @@ class EntitiesController extends Controller
 
         $fields = $entity->fields()->get();
 
-        // foreach ($fields as $field) {
-        //     $field->options()->delete();
-        //     $field->sqlProperties()->delete();
-        // }
+        foreach ($fields as $field) {
+            $field->options()->delete();
+            // $field->sqlProperties()->delete();
+        }
 
-        // $entity->fields()->delete();
+        $entity->fields()->delete();
 
-
-
-
-        // $entityNameLower = strtolower($entity->name);
-        // $entityFrontPath = "$appPath/app/$entity->frontend_path/$entityNameLower" . "s";
-
-        // $entity->delete();
+        $entity->delete();
 
         return ApiResponseController::response('Entity deleted successfully', 200, [$output]);
     }
@@ -396,7 +386,7 @@ class EntitiesController extends Controller
 
 
         $field->options()->delete();
-        $field->sqlProperties()->delete();
+
 
         $field->delete();
 

@@ -21,15 +21,15 @@ class InputTypeSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         DB::table('input_types')->insert([
-            ["name" => 'text'],
-            ["name" => 'textarea'],
-            ["name" => 'number'],
-            ["name" => 'date'],
-            ["name" => 'select'],
-            ["name" => 'checkbox'],
-            ["name" => 'radio'],
-            ["name" => 'file'],
-            ["name" => 'relatedSelect']
+            ["name" => 'text', 'sql_type' => 'string'],
+            ["name" => 'textarea', 'sql_type' =>'longText' ],
+            ["name" => 'number', 'sql_type' => 'integer'],
+            ["name" => 'date', 'sql_type' => 'date'],
+            ["name" => 'select', 'sql_type' =>'string'],
+            ["name" => 'checkbox', 'sql_type' => 'boolean'],
+            ["name" => 'radio', 'sql_type' => 'string'],
+            ["name" => 'file', 'sql_type' => 'jsonb'],
+            // ["name" => 'relatedSelect']
         ]);
     }
 }

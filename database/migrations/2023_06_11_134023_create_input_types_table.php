@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('input_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('sql_type');
             $table->timestamps();
         });
     }
