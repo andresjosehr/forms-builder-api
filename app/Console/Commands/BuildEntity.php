@@ -74,6 +74,8 @@ class BuildEntity extends Command
             'label' => $json['label']
         ]);
 
+        $this->call('migrate');
+
         // Edit the routes file
 
         // Get the routes/api.php file
