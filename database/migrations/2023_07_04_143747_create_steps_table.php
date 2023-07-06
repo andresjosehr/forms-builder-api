@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('entities', function (Blueprint $table) {
+        Schema::create('steps', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->nullable();
-            $table->string('name')->nullable();
-            $table->string('label');
-            $table->boolean('built_creation')->default(false);
-            $table->boolean('built_edition')->default(false);
-            $table->string('frontend_path');
+            $table->string("label");
+            $table->string("order");
+            $table->unsignedBigInteger('entity_id');
+            $table->foreign('entity_id')->references('id')->on('entities');
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entities');
+        Schema::dropIfExists('steps');
     }
 };

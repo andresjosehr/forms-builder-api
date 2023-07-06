@@ -19,6 +19,7 @@ class Field extends Model
         'input_type_id',
         'searchable',
         'visible',
+        'step',
         'editable',
         'entity_id'
     ];

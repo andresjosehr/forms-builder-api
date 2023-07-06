@@ -15,7 +15,6 @@ class Entity extends Model
         'built_creation',
         'built_edition',
         'frontend_path',
-        'searchable_list',
         'app_id'
     ];
 
@@ -29,5 +28,9 @@ class Entity extends Model
 
     public function app(){
         return $this->belongsTo(App::class);
+    }
+
+    public function steps(){
+        return $this->hasMany(Step::class);
     }
 }

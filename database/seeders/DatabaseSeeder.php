@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         DB::table('validations')->truncate();
         DB::table('relationships')->truncate();
         DB::table('validations')->truncate();
+        DB::table('steps')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->call(InputTypeSeeder::class);
