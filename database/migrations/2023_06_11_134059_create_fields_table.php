@@ -19,8 +19,10 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('label');
             $table->string('step');
-            $table->boolean('built_creation')->default(false);
-            $table->boolean('built_edition')->default(false);
+            $table->boolean('built_creation_layout_1')->default(false);
+            $table->boolean('built_edition_layout_1')->default(false);
+            $table->boolean('built_creation_layout_2')->default(false);
+            $table->boolean('built_edition_layout_2')->default(false);
 
             $table->unsignedBigInteger('field_type_id');
             $table->foreign('field_type_id')->references('id')->on('field_types');

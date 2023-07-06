@@ -90,8 +90,8 @@ class EntitiesController extends Controller
             'name' => $data['name'],
             'label' => $data['label'],
             'code' => $data['code'],
-            'built_creation' => $data['build'],
-            'built_edition' => false,
+            'built_edition_layout_1' => false,
+            'built_edition_layout_2' => false,
             'frontend_path' => $data['frontend_path'],
         ]);
 
@@ -122,7 +122,8 @@ class EntitiesController extends Controller
             'label' => $field['label'],
             'code' => $field['code'],
             'step' => $field['step'],
-            'built_edition' => $field['built_edition'],
+            'built_edition_layout_1' => $field['built_edition_layout_1'],
+            'built_edition_layout_2' => $field['built_edition_layout_2'],
             'field_type_id' => $field['field_type_id'],
             'input_type_id' => $field['input_type_id'],
             'searchable' => $field['searchable'],
@@ -133,7 +134,8 @@ class EntitiesController extends Controller
 
         $createdField = $entity->fields()->where('id', $field['id'])->first();
         if($createdField){
-            $fieldData['built_edition'] = !$createdField->built_edition ? false : $fieldData['built_edition'];
+            $fieldData['built_edition_layout_1'] = !$createdField->built_edition_layout_1 ? false : $fieldData['built_edition_layout_1'];
+            $fieldData['built_edition_layout_2'] = !$createdField->built_edition_layout_2 ? false : $fieldData['built_edition_layout_2'];
             $createdField->update($fieldData);
         }
 
@@ -147,7 +149,7 @@ class EntitiesController extends Controller
         $this->createOrUpdateOptions($createdField, $field);
         $this->syncValidations($createdField, $field);
 
-        return $fieldData['built_edition'];
+        return $fieldData['built_edition_layout_1'];
 
     }
 
@@ -252,7 +254,7 @@ class EntitiesController extends Controller
 
         $appPath = "C:/laragon/www/basura";
         $build = false;
-        if ($data['build']) {
+        if ($data['build_layout_1']) {
 
 
             $build = true;
@@ -267,8 +269,8 @@ class EntitiesController extends Controller
             shell_exec("sh ".storage_path('app/public/remove-spaces.sh')." '$postBuildPath'");
             shell_exec("sh ".storage_path('app/public/build-entity-laravel.bash')." '$appPath' '$entityBD'");
 
-            $entityBD->update(['built_creation' => true, 'built_edition' => true]);
-            $entityBD->fields()->update(['built_creation' => true, 'built_edition' => true]);
+            $entityBD->update(['built_creation_layout_1' => true, 'built_edition_layout_1' => true]);
+            $entityBD->fields()->update(['built_creation_layout_1' => true, 'built_edition_layout_1' => true]);
         }
 
 
@@ -401,7 +403,8 @@ class EntitiesController extends Controller
         $field = Field::find($id);
 
         // Update entity and set built_edition to false
-        $field->entity()->update(['built_edition' => false]);
+        $field->entity()->update(['built_edition_layout_1' => false]);
+        $field->entity()->update(['built_edition_layout_2' => false]);
 
 
         $field->options()->delete();

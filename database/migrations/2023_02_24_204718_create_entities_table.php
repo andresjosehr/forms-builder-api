@@ -18,8 +18,10 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->string('name')->nullable();
             $table->string('label');
-            $table->boolean('built_creation')->default(false);
-            $table->boolean('built_edition')->default(false);
+            $table->boolean('built_creation_layout_1')->default(false);
+            $table->boolean('built_edition_layout_1')->default(false);
+            $table->boolean('built_creation_layout_2')->default(false);
+            $table->boolean('built_edition_layout_2')->default(false);
             $table->string('frontend_path');
             $table->timestamps();
         });
