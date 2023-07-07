@@ -123,7 +123,7 @@ class EntitiesController extends Controller
             'code' => $field['code'],
             'step' => $field['step'],
             'built_edition_layout_1' => $field['built_edition_layout_1'],
-            'built_edition_layout_2' => $field['built_edition_layout_2'],
+            // 'built_edition_layout_2' => $field['built_edition_layout_2'],
             'field_type_id' => $field['field_type_id'],
             'input_type_id' => $field['input_type_id'],
             'searchable' => $field['searchable'],
@@ -135,7 +135,7 @@ class EntitiesController extends Controller
         $createdField = $entity->fields()->where('id', $field['id'])->first();
         if($createdField){
             $fieldData['built_edition_layout_1'] = !$createdField->built_edition_layout_1 ? false : $fieldData['built_edition_layout_1'];
-            $fieldData['built_edition_layout_2'] = !$createdField->built_edition_layout_2 ? false : $fieldData['built_edition_layout_2'];
+            // $fieldData['built_edition_layout_2'] = !$createdField->built_edition_layout_2 ? false : $fieldData['built_edition_layout_2'];
             $createdField->update($fieldData);
         }
 
