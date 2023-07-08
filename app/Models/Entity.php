@@ -12,11 +12,9 @@ class Entity extends Model
         'name',
         'label',
         'code',
-        'built_creation_layout_1',
-        'built_edition_layout_1',
-
-        'built_creation_layout_2',
-        'built_edition_layout_2',
+        'built_creation',
+        'built_edition',
+        'layout',
 
         'frontend_path',
         'app_id'
