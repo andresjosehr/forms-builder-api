@@ -20,7 +20,12 @@ class EntitiesController extends Controller
     {
         $perPage = $request->input('perPage') ? $request->input('perPage') : 10;
 
-        $entities = Entity::with('fields', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->paginate($perPage);
+        $entities = Entity::
+            with('fields', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')
+            ->when($request->layout, function ($query, $layout) {
+                return $query->where('layout', $layout);
+            })
+            ->paginate($perPage);
 
         return ApiResponseController::response('Entity created successfully', 200, $entities);
 
@@ -92,7 +97,6 @@ class EntitiesController extends Controller
             'code' => $data['code'],
             'layout' => $data['layout'],
             'built_edition' => $data['built_edition'],
-            'frontend_path' => $data['frontend_path'],
         ]);
 
         $entity->save();
@@ -125,6 +129,7 @@ class EntitiesController extends Controller
             'built_edition' => $field['built_edition'],
             'field_type_id' => $field['field_type_id'],
             'input_type_id' => $field['input_type_id'],
+            'related_entity_id' => $field['related_entity_id'],
             'searchable' => $field['searchable'],
             'visible' => $field['visible'],
             'editable' => $field['editable'],
@@ -247,7 +252,7 @@ class EntitiesController extends Controller
     private function buildEntity($entity, $data)
     {
         $entityBD = Entity::where('code', $entity['code'])->where('id', $entity->id)
-            ->with('fields', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->first();
+            ->with('fields.relatedEntity', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->first();
 
 
         $appPath = "C:/laragon/www/basura";
@@ -262,7 +267,7 @@ class EntitiesController extends Controller
             shell_exec("sh ".storage_path('app/public/build-entity-angular.bash')." $entityBD->id $apiUrl $appPath");
 
             $entityNameLower = strtolower($entityBD->name);
-            $postBuildPath = "$appPath/app/$entityBD->frontend_path/$entityNameLower" . "s";
+            $postBuildPath = "$appPath/app/src/app/forms-1/$entityNameLower" . "s";
 
             shell_exec("sh ".storage_path('app/public/remove-spaces.sh')." '$postBuildPath'");
             shell_exec("sh ".storage_path('app/public/build-entity-laravel.bash')." '$appPath' '$entityBD'");
@@ -287,7 +292,7 @@ class EntitiesController extends Controller
      */
     public function show($id)
     {
-        $entities = Entity::with('fields','steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->where('id', $id)->first();
+        $entities = Entity::with('fields.relatedEntity', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->where('id', $id)->first();
 
         return ApiResponseController::response('Entities retrieved successfully', 200, $entities);
     }
@@ -301,7 +306,7 @@ class EntitiesController extends Controller
      */
     public function getEntity($id)
     {
-        $entities = Entity::with('fields', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->where('id', $id)->first();
+        $entities = Entity::with('fields.relatedEntity.fields', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->where('id', $id)->first();
 
         return ApiResponseController::response('Entities retrieved successfully', 200, $entities);
     }

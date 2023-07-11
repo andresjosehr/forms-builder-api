@@ -16,6 +16,7 @@ class GlobalController extends Controller
         $data['relation_types'] = \App\Models\RelationType::all();
         $data['sql_property_types'] = \App\Models\SqlPropertyType::all();
         $data['validations'] = \App\Models\Validation::all();
+        $data['entities'] = \App\Models\Entity::where('layout', 1)->get();
 
         return ApiResponseController::response('Consulta Exitosa', 200, $data);
 

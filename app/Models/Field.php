@@ -17,6 +17,7 @@ class Field extends Model
         'built_edition',
         'field_type_id',
         'input_type_id',
+        'related_entity_id',
         'searchable',
         'visible',
         'step',
@@ -50,6 +51,10 @@ class Field extends Model
 
     public function entity(){
         return $this->belongsTo(Entity::class);
+    }
+
+    public function relatedEntity(){
+        return $this->belongsTo(Entity::class, 'related_entity_id', 'id');
     }
 
 

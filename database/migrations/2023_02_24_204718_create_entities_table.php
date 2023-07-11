@@ -21,7 +21,6 @@ return new class extends Migration
             $table->boolean('built_creation')->default(false);
             $table->boolean('built_edition')->default(false);
             $table->integer('layout');
-            $table->string('frontend_path');
             $table->timestamps();
         });
     }

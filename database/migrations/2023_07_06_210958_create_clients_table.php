@@ -30,8 +30,6 @@ return new class extends Migration
             $table->string('campaign');
             $table->string('zip_code');
             $table->string('balance');
-
-
             $table->timestamps();
         });
     }

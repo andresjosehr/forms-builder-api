@@ -29,6 +29,7 @@ class InputTypeSeeder extends Seeder
             ["name" => 'checkbox', 'sql_type' => 'boolean'],
             ["name" => 'radio', 'sql_type' => 'string'],
             ["name" => 'file', 'sql_type' => 'jsonb'],
+            ["name" => 'related', 'sql_type' => 'related'],
             // ["name" => 'relatedSelect']
         ]);
     }

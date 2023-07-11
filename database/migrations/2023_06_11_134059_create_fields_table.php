@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->string('name')->nullable();
             $table->string('label');
-            $table->string('step');
+            $table->string('step')->nullable();
             $table->boolean('built_creation')->default(false);
             $table->boolean('built_edition')->default(false);
 
@@ -32,6 +32,9 @@ return new class extends Migration
 
             $table->unsignedBigInteger('entity_id');
             $table->foreign('entity_id')->references('id')->on('entities');
+
+            $table->unsignedBigInteger('related_entity_id')->nullable();
+            $table->foreign('related_entity_id')->references('id')->on('entities');
 
             $table->boolean('visible');
             $table->boolean('editable');
