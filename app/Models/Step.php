@@ -14,4 +14,8 @@ class Step extends Model
         'order',
         'entity_id',
     ];
+
+    public function entity(){
+        return $this->belongsTo(Entity::class);
+    }
 }

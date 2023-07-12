@@ -21,6 +21,7 @@ class Field extends Model
         'searchable',
         'visible',
         'step',
+        'order',
         'editable',
         'entity_id'
     ];

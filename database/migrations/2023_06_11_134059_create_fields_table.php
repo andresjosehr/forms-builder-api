@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('label');
             $table->string('step')->nullable();
+            $table->integer('order')->nullable();
             $table->boolean('built_creation')->default(false);
             $table->boolean('built_edition')->default(false);
 

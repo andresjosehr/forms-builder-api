@@ -44,6 +44,7 @@ Route::get('check-log', 'App\Http\Controllers\AppsController@checkLog');
     Route::resource('entities', 'App\Http\Controllers\EntitiesController');
     Route::get('get-entity/{id}', 'App\Http\Controllers\EntitiesController@getEntity');
     Route::get('delete-field/{id}', 'App\Http\Controllers\EntitiesController@deleteField');
+    Route::delete('step/{id}', 'App\Http\Controllers\EntitiesController@deleteStep');
 
 
 	/* Add new routes here */
