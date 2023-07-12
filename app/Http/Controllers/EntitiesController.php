@@ -272,7 +272,7 @@ class EntitiesController extends Controller
             ->with('fields.relatedEntity', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->first();
 
 
-        $appPath = "C:/laragon/www/basura";
+        $appPath = env('TARGET_APP_LOCATION');
         $build = false;
         if ($data['build']) {
 
@@ -373,7 +373,7 @@ class EntitiesController extends Controller
         $entity = Entity::find($id);
 
         $apiUrl = env('APP_URL');
-        $appPath = "C:/laragon/www/" . $entity->app->code;
+        $appPath = env('TARGET_APP_LOCATION'). "/" . $entity->app->code;
 
         $output = shell_exec("sh ".storage_path('app/public/delete-entity-angular.bash')." $entity->id $apiUrl $appPath");
 
