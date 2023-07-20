@@ -105,6 +105,8 @@ class EntitiesController extends Controller
     {
         $entity = $data['id'] ? Entity::find($data['id']) : new Entity();
 
+        // chance spaces to underscore and lowercase
+        $data['name'] = strtolower(str_replace(' ', '_', $data['name']));
         $entity->fill([
             'name' => $data['name'],
             'label' => $data['label'],
@@ -137,6 +139,7 @@ class EntitiesController extends Controller
     private function createOrUpdateField($entity, $field, $order)
     {
 
+        $field['name'] = strtolower(str_replace(' ', '_', $field['name']));
         $fieldData = [
             'name' => $field['name'],
             'label' => $field['label'],

@@ -1,2 +1,9 @@
 *
 !.gitignore
+
+!build-app.bash
+!build-entity-angular.bash
+!build-entity-laravel.bash
+!build-entity.sh
+!delete-entity-angular.bash
+!remove-spaces.sh
