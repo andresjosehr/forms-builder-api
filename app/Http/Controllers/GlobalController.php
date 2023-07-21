@@ -11,7 +11,6 @@ class GlobalController extends Controller
 
         $data = [];
 
-        $data['field_types'] = \App\Models\FieldType::all();
         $data['input_types'] = \App\Models\InputType::all();
         $data['relation_types'] = \App\Models\RelationType::all();
         $data['sql_property_types'] = \App\Models\SqlPropertyType::all();

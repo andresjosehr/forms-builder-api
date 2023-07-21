@@ -30,9 +30,11 @@ Route::get('check-log', 'App\Http\Controllers\AppsController@checkLog');
 
 
     Route::get('hola-mundo', 'App\Http\Controllers\AppsController@buildApp');
+
     // Route::get('apps/get-all', 'App\Http\Controllers\AppsController@getAll');
     // Route::get('apps/create', 'App\Http\Controllers\AppsController@store');
     // Route::get('apps/abort-creation', 'App\Http\Controllers\AppsController@abort');
+
 	Route::resource('apps', 'App\Http\Controllers\AppsController');
 
     Route::get('test', 'App\Http\Controllers\TestController@index');

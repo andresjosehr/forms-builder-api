@@ -30,7 +30,6 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->call(InputTypeSeeder::class);
-        $this->call(FieldTypeSeeder::class);
         $this->call(RelationTypeSeeder::class);
         $this->call(SqlPropertyTypeSeeder::class);
         $this->call(ValidationsSeeder::class);

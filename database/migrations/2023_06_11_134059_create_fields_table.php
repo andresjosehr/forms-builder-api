@@ -23,9 +23,6 @@ return new class extends Migration
             $table->boolean('built_creation')->default(false);
             $table->boolean('built_edition')->default(false);
 
-            $table->unsignedBigInteger('field_type_id');
-            $table->foreign('field_type_id')->references('id')->on('field_types');
-
             $table->unsignedBigInteger('input_type_id');
             $table->foreign('input_type_id')->references('id')->on('input_types');
 

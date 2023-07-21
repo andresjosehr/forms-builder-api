@@ -42,10 +42,6 @@ class Field extends Model
         return $this->belongsTo(InputType::class);
     }
 
-    public function fieldType(){
-        return $this->belongsTo(FieldType::class);
-    }
-
     public function validations(){
         return $this->belongsToMany(Validation::class)->withPivot('value');
     }

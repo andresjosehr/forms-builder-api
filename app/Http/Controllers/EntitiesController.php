@@ -21,7 +21,7 @@ class EntitiesController extends Controller
         $perPage = $request->input('perPage') ? $request->input('perPage') : 10;
 
         $entities = Entity::
-            with('fields', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')
+            with('fields', 'steps', 'fields.inputType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')
             ->when($request->layout, function ($query, $layout) {
                 return $query->where('layout', $layout);
             })
@@ -92,7 +92,7 @@ class EntitiesController extends Controller
         }
 
 
-        $entity = Entity::with('fields', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')
+        $entity = Entity::with('fields', 'steps', 'fields.inputType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')
         // Order fields by order
         ->with(['fields' => function ($query) {
             $query->orderBy('order', 'asc');
@@ -147,7 +147,6 @@ class EntitiesController extends Controller
             'step' => $field['step'],
             'order' => $order,
             'built_edition' => $field['built_edition'],
-            'field_type_id' => $field['field_type_id'],
             'input_type_id' => $field['input_type_id'],
             'related_entity_id' => $field['related_entity_id'],
             'searchable' => $field['searchable'],
@@ -272,7 +271,7 @@ class EntitiesController extends Controller
     private function buildEntity($entity, $data)
     {
         $entityBD = Entity::where('code', $entity['code'])->where('id', $entity->id)
-            ->with('fields.relatedEntity', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->first();
+            ->with('fields.relatedEntity', 'steps', 'fields.inputType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')->first();
 
 
         $appPath = env('TARGET_APP_LOCATION');
@@ -312,7 +311,7 @@ class EntitiesController extends Controller
      */
     public function show($id)
     {
-        $entities = Entity::with('fields.relatedEntity', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')
+        $entities = Entity::with('fields.relatedEntity', 'steps', 'fields.inputType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')
         ->with(['fields' => function ($query) {
             $query->orderBy('order', 'asc');
         }])
@@ -330,7 +329,7 @@ class EntitiesController extends Controller
      */
     public function getEntity($id)
     {
-        $entities = Entity::with('fields.relatedEntity.fields', 'steps', 'fields.inputType', 'fields.fieldType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')
+        $entities = Entity::with('fields.relatedEntity.fields', 'steps', 'fields.inputType', 'fields.options', 'fields.validations', 'relationships', 'relationships.entity', 'relationships.relationshipType')
         ->with(['fields' => function ($query) {
             $query->orderBy('order', 'asc');
         }])
