@@ -63,17 +63,9 @@ class EntitiesController extends Controller
                 $i++;
             }
 
-            // foreach ($entities as $data) {
-                $entityDB = $this->createOrUpdateEntity($entity);
-                $this->syncSteps($entityDB, $entity);
-                $this->createOrUpdateFields($entityDB, $entity);
-            // }
-
-            // foreach ($entities as $entityData) {
-
-            //     $this->createOrUpdateRelationships($entityData, $data);
-            //     $this->updateRelatedEntityId($entityData, $data);
-            // }
+            $entityDB = $this->createOrUpdateEntity($entity);
+            $this->syncSteps($entityDB, $entity);
+            $this->createOrUpdateFields($entityDB, $entity);
 
         } catch (\Exception $e) {
             DB::rollback();
